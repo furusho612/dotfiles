@@ -49,3 +49,18 @@ make upgrade
 ```bash
 make lint
 ```
+
+## Notes
+
+### Module interpreter
+
+`inventory/group_vars/all.yml` pins the interpreter used to run modules to the interpreter
+running `ansible-playbook` (`ansible_playbook_python`). This is required because a
+version-agnostic path such as `/opt/homebrew/bin/python3` follows Homebrew's Python upgrades:
+when it pointed at Python 3.15, every module died on import with
+`AttributeError: module 'dataclasses' has no attribute '_is_type'` (ansible-core 2.21 patches
+`dataclasses._is_type`, which Python 3.15 removed).
+
+Do not set `interpreter_python` to a version-agnostic path in `ansible.cfg`; it falls back to
+interpreter discovery (`auto_silent`) when `group_vars` does not apply, for example with an
+ad-hoc command against another inventory.

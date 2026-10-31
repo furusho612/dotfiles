@@ -1,0 +1,11 @@
+---
+default_shell: "fish"
+default_term: "xterm-256color"
+
+# モジュールを実行する Python を ansible-playbook 自身のインタプリタに固定する。
+# ansible-playbook が動作している Python は必ず ansible-core のサポート対象なので、
+# Homebrew の python3 (未対応の 3.15 など) を掴んで module_utils の import が
+# 壊れる事故を構造的に防げる。
+# ansible.builtin.pip が必要とする packaging も ansible-core の依存として
+# 同じインタプリタに入っているため、Homebrew の python-packaging に依存しない。
+ansible_python_interpreter: "{{ ansible_playbook_python }}"

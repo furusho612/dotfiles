@@ -70,8 +70,9 @@ homebrew_packages:
   - openssl
   - protobuf
   - python3
-  # ansible.builtin.pip モジュールがターゲット Python 上で必要とする
-  - python-packaging
+  # ansible.builtin.pip が必要とする packaging は、モジュールを実行する Python
+  # (= ansible-playbook の Python) に ansible-core の依存として入っているため
+  # python-packaging は管理しない
   # - reattach-to-user-namespace
   # https://github.com/yamadashy/repomix
   - repomix
