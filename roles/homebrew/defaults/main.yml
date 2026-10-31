@@ -3,7 +3,6 @@ homebrew_taps:
   - hashicorp/tap
 
 homebrew_cask_apps:
-  - alacritty
   - claude-code@latest
   - cloudflare-warp
   - cotEditor
