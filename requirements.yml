@@ -1,2 +1,6 @@
 collections:
+  # community.general.yarn は 12.5.0 だと yarn が stderr に出す警告をすべて
+  # 失敗として扱い、Node.js の非推奨警告だけでタスクが落ちる。13.5.0 では
+  # 警告として扱われるため、修正版を下回らないよう下限を設ける。
   - name: community.general
+    version: ">=13.5.0"

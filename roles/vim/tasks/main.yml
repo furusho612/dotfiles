@@ -18,12 +18,17 @@
   loop:
     - neovim
 
+# 社内プロキシの TLS 検査証明書はシステムキーチェーンにだけ登録されている。
+# mise 管理の Node.js は同梱 CA だけで検証するため、レジストリへの接続が
+# self-signed certificate で失敗する。システムキーチェーンを信頼させる
 - name: Install neovim from yarn  # noqa: package-latest
   community.general.yarn:
     name: "{{ item }}"
     executable: "/opt/homebrew/bin/yarn"
     global: true
     state: latest
+  environment:
+    NODE_OPTIONS: "--use-system-ca"
   loop:
     - neovim
 
