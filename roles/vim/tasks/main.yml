@@ -20,7 +20,9 @@
 
 # 社内プロキシの TLS 検査証明書はシステムキーチェーンにだけ登録されている。
 # mise 管理の Node.js は同梱 CA だけで検証するため、レジストリへの接続が
-# self-signed certificate で失敗する。システムキーチェーンを信頼させる
+# self-signed certificate で失敗する。システムキーチェーンを信頼させる。
+# 併せて Node の警告を止める。yarn モジュールは stderr の非 JSON 行を
+# エラーとして扱うため、deprecation 警告が混ざるとタスクが失敗する
 - name: Install neovim from yarn  # noqa: package-latest
   community.general.yarn:
     name: "{{ item }}"
@@ -28,7 +30,7 @@
     global: true
     state: latest
   environment:
-    NODE_OPTIONS: "--use-system-ca"
+    NODE_OPTIONS: "--use-system-ca --no-warnings"
   loop:
     - neovim
 
