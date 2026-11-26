@@ -54,7 +54,6 @@ homebrew_packages:
   - gpg
   - terraform-ls
   - httpie
-  - infracost
   - jnv
   - jq
   - trivy
@@ -74,11 +73,9 @@ homebrew_packages:
   # python-packaging は管理しない
   # - reattach-to-user-namespace
   # https://github.com/yamadashy/repomix
-  - repomix
   - ripgrep
   - shellcheck
   - starship
-  - stern
   - telnet
   - terraformer
   # - tmux
