@@ -5,7 +5,6 @@ local lsp_servers = {
 	"biome",
 	"ts_ls",
 	"markdown_oxide",
-	"mdx_analyzer",
 	"jsonls",
 	"jsonnet_ls",
 	"yamlls",
@@ -41,22 +40,55 @@ vim.lsp.config("*", {
 	root_markers = { ".git" },
 })
 
+-- lua_ls がワークスペース設定を尋ね、テレメトリを送るのを止める
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			telemetry = { enable = false },
+			workspace = { checkThirdParty = false },
+		},
+	},
+})
+
 -- Enable each LSP server
 for _, lsp_server in ipairs(lsp_servers) do
 	vim.lsp.enable(lsp_server)
 end
+
+-- 補完と lspsaga の操作を、LSP が接続したバッファだけで有効にする
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("user_lsp_attach", { clear = true }),
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client == nil then
+			return
+		end
+		if client:supports_method("textDocument/completion") then
+			vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+		end
+		local keymaps = {
+			{ "<leader>rn", "<cmd>Lspsaga rename<CR>", "Rename symbol" },
+			{ "<leader>ca", "<cmd>Lspsaga code_action<CR>", "Code action" },
+			{ "<leader>d", "<cmd>Lspsaga peek_definition<CR>", "Peek definition" },
+			{ "<leader>o", "<cmd>Lspsaga outline<CR>", "Outline" },
+		}
+		for _, keymap in ipairs(keymaps) do
+			vim.keymap.set("n", keymap[1], keymap[2], { buffer = ev.buf, desc = keymap[3] })
+		end
+	end,
+})
 
 -- conform.nvim setup (formatter)
 require("conform").setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "ruff_format" },
-		javascript = { "prettier", "biome", stop_after_first = true },
-		typescript = { "prettier", "biome", stop_after_first = true },
-		javascriptreact = { "prettier", "biome", stop_after_first = true },
-		typescriptreact = { "prettier", "biome", stop_after_first = true },
-		json = { "prettier", "biome", stop_after_first = true },
-		css = { "prettier" },
+		javascript = { "biome" },
+		typescript = { "biome" },
+		javascriptreact = { "biome" },
+		typescriptreact = { "biome" },
+		json = { "biome" },
+		css = { "biome" },
 		sh = { "shfmt" },
 		bash = { "shfmt" },
 		go = { "gofumpt" },
@@ -64,16 +96,14 @@ require("conform").setup({
 	},
 	format_on_save = {
 		timeout_ms = 500,
-		lsp_fallback = true,
+		lsp_format = "fallback",
 	},
 })
 
 -- nvim-lint setup (linter)
+-- JS/TS の lint は biome (LSP) に任せる。eslint_d はプロジェクトの ESLint と
+-- 設定、プラグインを必要とし、biome より依存が大きいため使わない
 require("lint").linters_by_ft = {
-	javascript = { "eslint_d" },
-	typescript = { "eslint_d" },
-	javascriptreact = { "eslint_d" },
-	typescriptreact = { "eslint_d" },
 	json = { "jsonlint" },
 	yaml = { "yamllint" },
 	dockerfile = { "hadolint" },

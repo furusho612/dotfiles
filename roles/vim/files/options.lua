@@ -1,5 +1,4 @@
 local options = {
-  encoding = "utf-8",
   fileencoding = "utf-8",
   title = true,
   backup = false,
@@ -19,7 +18,7 @@ local options = {
   termguicolors = true,
   timeoutlen = 300,
   undofile = true,
-  updatetime = 100,
+  updatetime = 300,
   writebackup = false,
   shell = "fish",
   backupskip = { "/tmp/*", "/private/tmp/*" },
@@ -38,7 +37,6 @@ local options = {
   background = "dark",
   scrolloff = 8,
   sidescrolloff = 8,
-  guifont = "monospace:h17",
   splitbelow = false, -- オンのとき、ウィンドウを横分割すると新しいウィンドウはカレントウィンドウの下に開かれる
   splitright = false, -- オンのとき、ウィンドウを縦分割すると新しいウィンドウはカレントウィンドウの右に開かれる
 }

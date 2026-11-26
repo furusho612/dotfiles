@@ -22,8 +22,15 @@ vim.diagnostic.config({
 	},
 })
 
+local diagnostic_float_group = vim.api.nvim_create_augroup("user_diagnostic_float", { clear = true })
+
+-- カーソルが止まったときに診断内容を表示する。診断の無いバッファでは何もしない
 vim.api.nvim_create_autocmd("CursorHold", {
+	group = diagnostic_float_group,
 	callback = function()
+		if #vim.diagnostic.get(0) == 0 then
+			return
+		end
 		vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
 	end,
 })

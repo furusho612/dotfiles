@@ -8,24 +8,24 @@
     - "{{ ansible_env.HOME }}/.config/nvim"
     - "{{ ansible_env.HOME }}/.config/nvim/lua"
 
-- name: Install neovim from pip3
+# プロバイダの RPC ホストは Neovim 本体の要件に追随させるため、最新を使う
+- name: Install neovim from pip3  # noqa: package-latest
   ansible.builtin.pip:
     name: "{{ item }}"
     executable: "/opt/homebrew/bin/pip3"
     extra_args: "--break-system-packages"
-    state: present
+    state: latest
   loop:
     - neovim
 
-- name: Install neovim from yarn
+- name: Install neovim from yarn  # noqa: package-latest
   community.general.yarn:
     name: "{{ item }}"
     executable: "/opt/homebrew/bin/yarn"
     global: true
-    state: present
+    state: latest
   loop:
     - neovim
-  failed_when: false
 
 # 配布リストから削除されたファイルのリンクを回収するため、
 # リンク先が存在しないシンボリックリンクを検出して削除する

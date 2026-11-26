@@ -71,4 +71,4 @@ keymap("v", ">", ">gv", opts)
 -- keymap("n", "K", ":lua show_documentation()<CR>", opts)
 
 -- Format with conform.nvim
-keymap("n", "<leader>f", "<cmd>lua require('conform').format({ async = true, lsp_fallback = true })<CR>", opts)
+keymap("n", "<leader>f", "<cmd>lua require('conform').format({ async = true, lsp_format = 'fallback' })<CR>", opts)

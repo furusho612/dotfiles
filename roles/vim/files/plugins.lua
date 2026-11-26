@@ -1,10 +1,4 @@
 return {
-	-- Font
-	{
-		"lambdalisue/nerdfont.vim",
-		event = "VeryLazy",
-	},
-
 	-- Colorscheme
 	{
 		"folke/tokyonight.nvim",
@@ -76,9 +70,6 @@ return {
 		},
 		config = function()
 			require("nvim-tree").setup()
-			vim.opt.termguicolors = true
-			vim.g.loaded_netrw = 1
-			vim.g.loaded_netrwPlugin = 1
 		end,
 	},
 
@@ -99,13 +90,10 @@ return {
 
 	-- インデントガイド
 	{
-		"nathanaelkane/vim-indent-guides",
+		"lukas-reineke/indent-blankline.nvim",
+		main = "ibl",
 		event = "BufReadPre",
-		config = function()
-			vim.g.indent_guides_enable_on_vim_startup = 1
-			vim.g.indent_guides_exclude_filetypes = { "help" }
-			vim.g.indent_guides_auto_colors = 0
-		end,
+		opts = {},
 	},
 
 	-- Comment in/out
@@ -132,7 +120,6 @@ return {
 	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
-		version = "0.1.8",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		cmd = "Telescope",
 		keys = {
@@ -229,18 +216,20 @@ return {
 
 	-- Markdown Preview
 	{
-		"kannokanno/previm",
-		ft = { "markdown", "md" },
+		"previm/previm",
+		ft = "markdown",
 		config = function()
-			vim.cmd([[autocmd BufRead,BufNewFile *.md set filetype=markdown]])
-			vim.g.previm_open_cmd = "open -a Google\\ Chrome"
+			-- `open -a` は同名アプリが複数動いていると、ウィンドウを持たない
+			-- インスタンスに開く要求を送って何も表示されない。実行ファイルを直接
+			-- 起動し、既定プロファイルのインスタンスに開かせる。
+			vim.g.previm_open_cmd = "'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'"
 		end,
 	},
 
 	-- Marp
 	{
 		"nwiizo/marp.nvim",
-		ft = { "markdown", "md" },
+		ft = "markdown",
 		config = function()
 			require("marp").setup({
 				marp_command = "npx @marp-team/marp-cli@latest",
